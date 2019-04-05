@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.ImportBillController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.ImportBillController">
    <children>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0">
          <children>
@@ -47,7 +47,7 @@
             </Label>
          </children>
       </HBox>
-      <TableView layoutY="80.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="399.0" prefWidth="800.0">
+      <TableView fx:id="table" layoutY="80.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="399.0" prefWidth="800.0">
         <columns>
           <TableColumn fx:id="barcodeColumn" prefWidth="142.0" text="بار كود" />
           <TableColumn fx:id="itemColumn" prefWidth="168.0" text="السلعة" />

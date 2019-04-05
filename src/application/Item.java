@@ -10,6 +10,12 @@ public class Item {
 	double sellPrice;
 	LocalDate expDate;	
 	
+	//// for the tableview
+	
+	double totalBP;
+	double totalSP;
+	int quant;
+	
 	public Item() {
 		
 	}
@@ -23,6 +29,17 @@ public class Item {
 		this.expDate = expDate;
 	}
 	
+	
+	public Item(String barcode, String name,int quant, double buyPrice, double sellPrice, LocalDate expDate,double totalBP,double totalSP) {
+		super();
+		this.barcode = barcode;
+		this.name = name;
+		this.buyPrice = buyPrice;
+		this.sellPrice = sellPrice;
+		this.expDate = expDate;
+		this.totalBP=totalBP;
+		this.totalSP=totalSP;
+	}
 	
 	
 	public String getBarcode() {
@@ -57,7 +74,29 @@ public class Item {
 	}
 
 
-	
+	public double getTotalBP() {
+		return totalBP;
+	}
+
+	public void setTotalBP(double totalBP) {
+		this.totalBP = totalBP;
+	}
+
+	public double getTotalSP() {
+		return totalSP;
+	}
+
+	public void setTotalSP(double totalSP) {
+		this.totalSP = totalSP;
+	}
+
+	public int getQuant() {
+		return quant;
+	}
+
+	public void setQuant(int quant) {
+		this.quant = quant;
+	}
 	
 }
 
