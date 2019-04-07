@@ -34,6 +34,7 @@ public class Item {
 		super();
 		this.barcode = barcode;
 		this.name = name;
+		this.quant=quant;
 		this.buyPrice = buyPrice;
 		this.sellPrice = sellPrice;
 		this.expDate = expDate;
@@ -96,6 +97,11 @@ public class Item {
 
 	public void setQuant(int quant) {
 		this.quant = quant;
+	}
+	
+	public void update() {
+		this.quant++;
+		this.totalSP=sellPrice*quant;
 	}
 	
 }
