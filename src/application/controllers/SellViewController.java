@@ -74,7 +74,9 @@ public class SellViewController implements Initializable {
 			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
 					"11");
 			Statement statement = connection.createStatement();
-			String q = "select name from stored";
+			String q="delete from stored where quantity<=0";
+			statement.executeUpdate(q);
+			 q = "select name from stored";
 			ResultSet rs = statement.executeQuery(q);
 
 			while (rs.next()) {
@@ -123,6 +125,7 @@ public class SellViewController implements Initializable {
 					Statement statement = connection.createStatement();
 					String q = "update stored set quantity=quantity-"+ itemsData.get(i).getQuant()+" where name='"+itemsData.get(i).getName()+"'";
 				    statement.executeUpdate(q);
+				    
 					q="select * from sold where name='"+itemsData.get(i).getName()+"'";
              ResultSet r= statement.executeQuery(q);
              
