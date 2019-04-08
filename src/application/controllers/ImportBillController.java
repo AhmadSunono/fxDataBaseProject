@@ -94,13 +94,13 @@ public class ImportBillController implements Initializable {
 	void buttonHandler(ActionEvent event) throws SQLException {
 		if(event.getSource().toString().contains("saveButton")) {
 			
-			// åæä ÈäÔæİ Çæá ÇÔí İí ÇÓã ãæÒÚ æáÇ áÃ¡ ÇĞÇ áÇ ÎáÕ ÈäÖíİ ÚÇáÓÊæÑ ãÈÇÔÑÉ ÈÏæä ÈæÊ ÇíÊã
-			// ÇĞÇ Çå ÈäÚãá ÇáßæíÑí åÇí Çáí ÊÍÊ 
-			// ÈÚÏíä ÈäÍÏË ÇáÓÊæÑ ÊÍÏíË ¡ÇĞÇ ÇáÇíÊãÒ ãæÌæÏÇÊ ÈäÒíÏ Úáíåã æÇĞÇ áÇ ÈäÖíİåã			
+			// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ã¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			// ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½			
 			
 			// Data Base Query 
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","ahmad","112233");
+			Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","imad","11");
 			Statement statement=connection.createStatement();
 			String q1="";
 //			String q1="insert into STORED (name,barcode, quantity, buy_price, sell_price, exp_date) values('"+itemName+"','"+barcode+"',"+quant+","+buyPrice+","+sellPrice+",TO_DATE('"+expDate+"','YYYY-MM-DD'))";
@@ -132,17 +132,17 @@ public class ImportBillController implements Initializable {
 			if (event.getCode().equals(KeyCode.ENTER)) {
 				barcode = barcodeReader.getText();
 				/*
-				// ÇĞÇ ÇáÈÇÑßæÏ åÇÏ ãæÌæÏ ÈÇáÏÇÊÇ ÈíÓ ãÚäÇÊå ãÚáæãÇÊå ãÚäÇ ÈÓ ÈäØáÈ ÇáßãíÉ
-				// æÊÇÑíÎ ÇáÇäÊåÇÁ ÈÏæä ÇÓÚÇÑ
+				// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 				if (true)
 					;
-				// ÇĞÇ áÃ ÈäÔæİ ÇáÇÓã ÇĞÇ ãæÌæÏ ÈÇáÏÇÊÇ ÈíÓ ¡ ÈäÚØí ÇáÈÇÑßæÏ ÊÈÚ åÇÏ ÇáÇÓã
-				// ááãÊÛíÑ ÈÇÑßæÏ æÈäÇÎÏ ßãíÉ æÊÇÑíÎ ÇäÊåÇÁ
+				// ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				else if (true)
 					;
-				// ÈÇáÍÇáÊíä åÏæá ÇáÓáÚÉ ãæÌæÏÉ ÈÇáãÎÒä İ ãÇ ÈäÖíİåÇ ÈÓ ÈäÚÏá Ú ßãíÊåÇ æÊÇÑíÎåÇ
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-				// ÇĞÇ ÇáÈÇÑßæÏ æÇáÇÓã ÌÏÇÏ ¡ ÈäÇÎÏ ßá ÇáãÚáæãÇÊ æÈäÖíİåÇ ááãÎÒä ßÓáÚÉ ÌÏíÏÉ
+				// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 				else
 					;
 					
@@ -151,8 +151,8 @@ public class ImportBillController implements Initializable {
 				
 				// show ItemName Dialog
 				Dialog<String> nameDialog = new Dialog<>();
-				nameDialog.setTitle("ÇÓã ÇáÓáÚÉ");
-				nameDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÇÓã ÇáÓáÚÉ");
+				nameDialog.setTitle("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+				nameDialog.setHeaderText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 				Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
 				stage2.getIcons().add(new Image("/application/images/icon.png"));
@@ -161,7 +161,7 @@ public class ImportBillController implements Initializable {
 				TextFields.bindAutoCompletion(nameTF, storedItems);
 				nameDialog.getDialogPane().setContent(nameTF);
 
-				ButtonType buttonTypeOk2 = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+				ButtonType buttonTypeOk2 = new ButtonType("ï¿½ï¿½ï¿½ï¿½ï¿½", ButtonData.OK_DONE);
 				nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
 
 				nameDialog.setResultConverter(new Callback<ButtonType, String>() {
@@ -185,22 +185,22 @@ public class ImportBillController implements Initializable {
     			
 //    			
     			dialog=new TextInputDialog();
-    			dialog.setTitle("ÇáßãíÉ"); dialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎá ÇáßãíÉ");
+    			dialog.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); dialog.setHeaderText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     			quant=Integer.parseInt(dialog.showAndWait().get());
 //    			
     			dialog=new TextInputDialog();
-    			dialog.setTitle("ÓÚÑ ÔÑÇÁ ÇáæÍÏÉ"); dialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÓÚÑ ÔÑÇÁ ÇáæÍÏÉ");
+    			dialog.setTitle("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); dialog.setHeaderText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     			buyPrice=Double.parseDouble(dialog.showAndWait().get());
 //    			
     			dialog=new TextInputDialog();
-    			dialog.setTitle("ÓÚÑ ÈíÚ ÇáæÍÏÉ"); dialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÓÚÑ ÈíÚ ÇáæÍÏÉ");
+    			dialog.setTitle("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); dialog.setHeaderText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     			sellPrice=Double.parseDouble(dialog.showAndWait().get());
     			
     			
 				// show Calender dialog
 				Dialog<LocalDate> dateDialog = new Dialog<>();
-				dateDialog.setTitle("ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
-				dateDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+				dateDialog.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+				dateDialog.setHeaderText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 				Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("/application/images/icon.png"));
@@ -208,7 +208,7 @@ public class ImportBillController implements Initializable {
 				DatePicker datePicker = new DatePicker();
 				dateDialog.getDialogPane().setContent(datePicker);
 
-				ButtonType buttonTypeOk = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+				ButtonType buttonTypeOk = new ButtonType("ï¿½ï¿½ï¿½ï¿½ï¿½", ButtonData.OK_DONE);
 				dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
 
 				dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {

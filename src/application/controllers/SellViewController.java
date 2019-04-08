@@ -71,8 +71,8 @@ public class SellViewController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
-					"112233");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
+					"11");
 			Statement statement = connection.createStatement();
 			String q = "select name from stored";
 			ResultSet rs = statement.executeQuery(q);
@@ -100,7 +100,9 @@ public class SellViewController implements Initializable {
 	@FXML
 	void buttonHandler(ActionEvent event) {
 		if (event.getSource().toString().contains("saveAndNewButton")) {
-			
+			for(int i=0;i<itemsData.size();i++) {
+				System.out.println(itemsData.get(i).getBuyPrice());
+			}
 			/// After the query clear the table
 			if(itemsData.size() == 0) {
 				//هون بدي ديالوج يحكي انو فش ايتيمز فك عني يا كلب
@@ -117,9 +119,9 @@ public class SellViewController implements Initializable {
 					try {
 						DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 					
-					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad","11");
 					Statement statement = connection.createStatement();
-					String q = "update stored set quantity=quantity-1 where name='"+itemsData.get(i).getName()+"'";
+					String q = "update stored set quantity=quantity-"+ itemsData.get(i).getQuant()+" where name='"+itemsData.get(i).getName()+"'";
 				    statement.executeUpdate(q);
 					q="select * from sold where name='"+itemsData.get(i).getName()+"'";
              ResultSet r= statement.executeQuery(q);
@@ -139,12 +141,16 @@ public class SellViewController implements Initializable {
             	 if(count2==0) {
             	 //a.get(i).getName()+"','"+data.get(i).getBarcode()+"',"+data.get(i).getQuant()+","+data.get(i).getBuyPrice()+","+data.get(i).getSellPrice()+",TO_DATE('"+billDate.getValue()+"','YYYY-MM-DD'),'"
             q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
-           statement.executeUpdate(q);
-           q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),1)" ;
+        System.out.println("insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")");
+            statement.executeUpdate(q);
+           q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),"+ itemsData.get(i).getQuant()+")" ;
            statement.executeUpdate(q);
              
             	 }
             	 else {
+            		  q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
+            	        System.out.println("insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")");
+            	            statement.executeUpdate(q);
             	q="update selling_bill set quantity=quantity+1 where bar="+itemsData.get(i).getBarcode();	 
             		 statement.executeUpdate(q);
             	 }
@@ -153,7 +159,7 @@ public class SellViewController implements Initializable {
             	 }
              else {
             	 if(count2==0) {
-                 q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),1)" ;
+                 q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),"+ itemsData.get(i).getQuant()+")" ; 
             statement.executeUpdate(q);
             	 }
             	 else {
@@ -196,8 +202,8 @@ public class SellViewController implements Initializable {
 		if (event.getSource().toString().contains("itemNameTF")) {
 			if (event.getCode().equals(KeyCode.ENTER)) {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
-						"112233");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
+						"11");
 				Statement statement = connection.createStatement();
 				String q = "";
 
@@ -212,7 +218,7 @@ public class SellViewController implements Initializable {
 
 	public void showInTable(String barcode) throws SQLException {
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
 		Statement statement = connection.createStatement();
 		String q = "";
 
@@ -229,7 +235,7 @@ public class SellViewController implements Initializable {
 			}
 		}
 		if (!exist)
-			itemsData.add(new Item(rs.getString("barcode"), rs.getString("name"), 1, 0, rs.getDouble("sell_price"),
+			itemsData.add(new Item(rs.getString("barcode"), rs.getString("name"), 1, rs.getDouble("buy_price"), rs.getDouble("sell_price"),
 					null, 0, rs.getDouble("sell_price")));
 		else
 			itemsData.get(i).update();
