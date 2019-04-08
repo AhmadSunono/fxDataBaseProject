@@ -151,7 +151,7 @@ public class SellViewController implements Initializable {
             		  q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
             	        System.out.println("insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")");
             	            statement.executeUpdate(q);
-            	q="update selling_bill set quantity=quantity+1 where bar="+itemsData.get(i).getBarcode();	 
+            	q="update selling_bill set quantity=quantity+"+ itemsData.get(i).getQuant()+"where bar="+itemsData.get(i).getBarcode();	 
             		 statement.executeUpdate(q);
             	 }
             	 
@@ -163,7 +163,7 @@ public class SellViewController implements Initializable {
             statement.executeUpdate(q);
             	 }
             	 else {
-            		 q="update selling_bill set quantity=quantity+1 where bar="+itemsData.get(i).getBarcode();	 
+            		 q="update selling_bill set quantity=quantity+"+ itemsData.get(i).getQuant()+" where bar="+itemsData.get(i).getBarcode();	 
             		 statement.executeUpdate(q);
             	 }
              }
