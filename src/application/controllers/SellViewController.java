@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -81,7 +82,6 @@ public class SellViewController implements Initializable {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -102,6 +102,78 @@ public class SellViewController implements Initializable {
 		if (event.getSource().toString().contains("saveAndNewButton")) {
 			
 			/// After the query clear the table
+			if(itemsData.size() == 0) {
+				//هون بدي ديالوج يحكي انو فش ايتيمز فك عني يا كلب
+				//Dialog<String> nullDialog = new Dialog<>();
+                //nullDialog.setTitle("غير متوافر");
+				//nullDialog.setContentText("نعتذر ولكن لا يوجد اي سلع للبيع !");
+				
+			}
+			
+			for(int i=0;i<itemsData.size();i++) {
+		
+				//in case there is not 0 from this type
+				if(itemsData.get(i).getQuant()!=0) {
+					try {
+						DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+					
+					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+					Statement statement = connection.createStatement();
+					String q = "update stored set quantity=quantity-1 where name='"+itemsData.get(i).getName()+"'";
+				    statement.executeUpdate(q);
+					q="select * from sold where name='"+itemsData.get(i).getName()+"'";
+             ResultSet r= statement.executeQuery(q);
+             
+             int count=0;
+             while(r.next()) {
+            	 count++;}
+             q="select * from selling_bill where bar='"+itemsData.get(i).getBarcode()+"' and selling_date=TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD')" ;
+              r= statement.executeQuery(q);
+             
+             int count2=0;
+             while(r.next()) {
+            	 count2++;}
+             
+             
+             if(count==0) {
+            	 if(count2==0) {
+            	 //a.get(i).getName()+"','"+data.get(i).getBarcode()+"',"+data.get(i).getQuant()+","+data.get(i).getBuyPrice()+","+data.get(i).getSellPrice()+",TO_DATE('"+billDate.getValue()+"','YYYY-MM-DD'),'"
+            q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
+           statement.executeUpdate(q);
+           q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),1)" ;
+           statement.executeUpdate(q);
+             
+            	 }
+            	 else {
+            	q="update selling_bill set quantity=quantity+1 where bar="+itemsData.get(i).getBarcode();	 
+            		 statement.executeUpdate(q);
+            	 }
+            	 
+            	 
+            	 }
+             else {
+            	 if(count2==0) {
+                 q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),1)" ;
+            statement.executeUpdate(q);
+            	 }
+            	 else {
+            		 q="update selling_bill set quantity=quantity+1 where bar="+itemsData.get(i).getBarcode();	 
+            		 statement.executeUpdate(q);
+            	 }
+             }
+					
+					}
+					catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+				
+				
+				
+			}
+			
+			
 			itemsData.clear();
 			tableView.refresh();
 			totalPriceTF.clear();

@@ -22,8 +22,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class DailySalesController implements Initializable {
 
-	// ÈÊÍØ ãÍá ÚáÇãÉ ÇáÇÓÊİåÇã åÇí ÇáÇæÈÌßÊ ÊÇíÈ æÊÍÊ ÇáÇæÈÌßÊ ÊÇíÈ æÔæ ÈÏß íÚÑÖ
-	// æÊäÓÇÔ ÊíÈá ÏæÊ ÓíÊ ÏÇÊÇ
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	@FXML
 	private TableView<SoldItems> table;
 
@@ -80,7 +80,7 @@ public class DailySalesController implements Initializable {
 			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
 					"112233");
 			Statement statement = connection.createStatement();
-			String q = "select * from sold";
+			String q = "select * from sold , selling_bill where sold.barcode=selling_bill.bar";
 			ResultSet rs = statement.executeQuery(q);
 			double totalprofit = 0;
 			double sellprice = 0;
@@ -93,6 +93,7 @@ public class DailySalesController implements Initializable {
 			}
 
         for(int i=0;i<data.size();i++) {
+        	System.out.println(data.get(i).getQuant()*(data.get(i).getSellPrice()-data.get(i).getBuyPrice()));
             totalprofit+=data.get(i).getProfit();
             sellprice+=data.get(i).getTotalSellPrice();
         }

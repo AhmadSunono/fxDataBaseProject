@@ -61,5 +61,9 @@ public void setProfit(Double profit) {
 	this.profit = profit;
 }
 
+public void update() {
+	  this.profit=(this.sellPrice-this.buyPrice)*this.quant;
+}
+
    
 }

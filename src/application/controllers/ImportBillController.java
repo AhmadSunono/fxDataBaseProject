@@ -96,8 +96,7 @@ public class ImportBillController implements Initializable {
 			
 			// åæä ÈäÔæİ Çæá ÇÔí İí ÇÓã ãæÒÚ æáÇ áÃ¡ ÇĞÇ áÇ ÎáÕ ÈäÖíİ ÚÇáÓÊæÑ ãÈÇÔÑÉ ÈÏæä ÈæÊ ÇíÊã
 			// ÇĞÇ Çå ÈäÚãá ÇáßæíÑí åÇí Çáí ÊÍÊ 
-			// ÈÚÏíä ÈäÍÏË ÇáÓÊæÑ ÊÍÏíË ¡ÇĞÇ ÇáÇíÊãÒ ãæÌæÏÇÊ ÈäÒíÏ Úáíåã æÇĞÇ áÇ ÈäÖíİåã
-			
+			// ÈÚÏíä ÈäÍÏË ÇáÓÊæÑ ÊÍÏíË ¡ÇĞÇ ÇáÇíÊãÒ ãæÌæÏÇÊ ÈäÒíÏ Úáíåã æÇĞÇ áÇ ÈäÖíİåã			
 			
 			// Data Base Query 
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
@@ -113,6 +112,7 @@ public class ImportBillController implements Initializable {
 //				System.out.println(q1);
 				
 			}
+			
 			
 			data.clear();
 			table.refresh();
@@ -131,7 +131,7 @@ public class ImportBillController implements Initializable {
 		if (event.getSource().toString().contains("barcodeReader"))
 			if (event.getCode().equals(KeyCode.ENTER)) {
 				barcode = barcodeReader.getText();
-/*
+				/*
 				// ÇĞÇ ÇáÈÇÑßæÏ åÇÏ ãæÌæÏ ÈÇáÏÇÊÇ ÈíÓ ãÚäÇÊå ãÚáæãÇÊå ãÚäÇ ÈÓ ÈäØáÈ ÇáßãíÉ
 				// æÊÇÑíÎ ÇáÇäÊåÇÁ ÈÏæä ÇÓÚÇÑ
 				if (true)
@@ -147,8 +147,7 @@ public class ImportBillController implements Initializable {
 					;
 					
 					
-					*/
-				
+					*/				
 				
 				// show ItemName Dialog
 				Dialog<String> nameDialog = new Dialog<>();
@@ -227,6 +226,7 @@ public class ImportBillController implements Initializable {
 
 				expDate=dateDialog.showAndWait().get();
 
+    			
     			
 //
 //    			System.out.println(barcode+"    "+itemName+"    "+quant+"    "+buyPrice+"    "+sellPrice+"	"+expDate);
