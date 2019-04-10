@@ -74,7 +74,9 @@ public class StoreInventoryController implements Initializable {
 			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
 					"112233");
 			Statement statement=connection.createStatement();
-			String q="select * from stored";
+			String q="delete from stored where quantity<=0";
+			statement.executeUpdate(q);
+			 q="select * from stored";
 			ResultSet rs=statement.executeQuery(q);
 			
 			while(rs.next()) {
