@@ -100,7 +100,8 @@ public class ImportBillController implements Initializable {
 			
 			// Data Base Query 
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","imad","11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement=connection.createStatement();
 			String q1="";
 //			String q1="insert into STORED (name,barcode, quantity, buy_price, sell_price, exp_date) values('"+itemName+"','"+barcode+"',"+quant+","+buyPrice+","+sellPrice+",TO_DATE('"+expDate+"','YYYY-MM-DD'))";

@@ -71,8 +71,8 @@ public class SellViewController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q = "select name from stored";
 			ResultSet rs = statement.executeQuery(q);
@@ -119,8 +119,9 @@ public class SellViewController implements Initializable {
 					try {
 						DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 					
-					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad","11");
-					Statement statement = connection.createStatement();
+						Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+								"112233");
+						Statement statement = connection.createStatement();
 					String q = "update stored set quantity=quantity-"+ itemsData.get(i).getQuant()+" where name='"+itemsData.get(i).getName()+"'";
 				    statement.executeUpdate(q);
 					q="select * from sold where name='"+itemsData.get(i).getName()+"'";
@@ -201,9 +202,8 @@ public class SellViewController implements Initializable {
 
 		if (event.getSource().toString().contains("itemNameTF")) {
 			if (event.getCode().equals(KeyCode.ENTER)) {
-				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				String q = "";
 
@@ -218,7 +218,8 @@ public class SellViewController implements Initializable {
 
 	public void showInTable(String barcode) throws SQLException {
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+				"112233");
 		Statement statement = connection.createStatement();
 		String q = "";
 
