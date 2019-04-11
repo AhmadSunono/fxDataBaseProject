@@ -155,24 +155,3 @@ class BoughtItem extends Item{
 	
 	
 }
-
-
-class SoldItem extends Item{
-	int quant;
-	LocalDate sellingDate;
-	
-	public SoldItem() {
-		
-	}
-	
-	public SoldItem(String name,int quant,double sellPrice,LocalDate sellingDate) {
-		this.name=name;
-		this.quant=quant;
-		this.sellPrice=sellPrice;
-		this.sellingDate=sellingDate;
-	}
-	
-
-	
-	
-}

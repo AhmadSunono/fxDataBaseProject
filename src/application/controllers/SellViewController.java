@@ -103,7 +103,6 @@ public class SellViewController implements Initializable {
 	void buttonHandler(ActionEvent event) {
 		if (event.getSource().toString().contains("saveAndNewButton")) {
 			for(int i=0;i<itemsData.size();i++) {
-				System.out.println(itemsData.get(i).getBuyPrice());
 			}
 			/// After the query clear the table
 			if(itemsData.size() == 0) {
@@ -145,7 +144,6 @@ public class SellViewController implements Initializable {
             	 if(count2==0) {
             	 //a.get(i).getName()+"','"+data.get(i).getBarcode()+"',"+data.get(i).getQuant()+","+data.get(i).getBuyPrice()+","+data.get(i).getSellPrice()+",TO_DATE('"+billDate.getValue()+"','YYYY-MM-DD'),'"
             q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
-        System.out.println("insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")");
             statement.executeUpdate(q);
            q="insert into selling_bill values ('"+itemsData.get(i).getBarcode()+"',TO_DATE('"+LocalDate.now()+"','YYYY-MM-DD'),"+ itemsData.get(i).getQuant()+")" ;
            statement.executeUpdate(q);
@@ -153,7 +151,6 @@ public class SellViewController implements Initializable {
             	 }
             	 else {
             		  q="insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")";	 
-            	        System.out.println("insert into sold values ("+itemsData.get(i).getSellPrice()+",'"+itemsData.get(i).getBarcode()+"','"+itemsData.get(i).getName()+"',"+itemsData.get(i).getBuyPrice()+")");
             	            statement.executeUpdate(q);
             	q="update selling_bill set quantity=quantity+"+ itemsData.get(i).getQuant()+"where bar="+itemsData.get(i).getBarcode();	 
             		 statement.executeUpdate(q);

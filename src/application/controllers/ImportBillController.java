@@ -235,8 +235,6 @@ public class ImportBillController implements Initializable {
     			
 				data.add(new Item(barcode,itemName,quant,buyPrice,sellPrice,expDate,buyPrice*quant,sellPrice*quant));
 				table.refresh();
-				
-    			
     			barcodeReader.clear();
     			
 			}

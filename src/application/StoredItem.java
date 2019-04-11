@@ -26,7 +26,7 @@ public class StoredItem extends Item{
 	}
 	
 	public double getTotalProfit() {
-		return totalProfit;
+		return this.totalProfit=quant*(sellPrice-buyPrice);
 	}
 		
 	

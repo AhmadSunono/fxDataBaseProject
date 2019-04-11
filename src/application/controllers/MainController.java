@@ -2,7 +2,16 @@ package application.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ResourceBundle;
+
+import org.controlsfx.control.Notifications;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -14,6 +23,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -122,6 +132,14 @@ public class MainController implements Initializable {
 					new KeyValue(menu.translateXProperty(), 0, Interpolator.EASE_IN)));
 			stack.getChildren().remove(loginForm);
 			timeline.play();
+
+			try {
+				checkDates();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 //			   } else {
 //				   Alert alert = new Alert(AlertType.WARNING);
 //				   alert.setTitle("»Ì«‰«  œŒÊ· Œ«ÿ∆…");
@@ -144,7 +162,7 @@ public class MainController implements Initializable {
 
 	@FXML
 	void onMuseMoved(MouseEvent event) {
-		offTime=0;
+		offTime = 0;
 	}
 
 	public void signOut() {
@@ -156,6 +174,33 @@ public class MainController implements Initializable {
 
 	public void closeHandler(javafx.scene.input.MouseEvent event) {
 		System.exit(0);
+	}
+
+	public void checkDates() throws SQLException {
+
+		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
+		Statement statement = connection.createStatement();
+		String q = "select name,exp_date from stored";
+		ResultSet rs = statement.executeQuery(q);
+
+		LocalDate now = LocalDate.now();
+		int diff, diff2;
+
+		while (rs.next()) {
+			diff = Period.between(now, rs.getDate("exp_date").toLocalDate()).getMonths();
+			diff2 = Period.between(now, rs.getDate("exp_date").toLocalDate()).getYears();
+			if (diff < 1 && diff2 < 1) {
+				Notifications notifications = Notifications.create().title(" ‰»ÌÂ ≈ﬁ —«»  «—ÌŒ ≈‰ Â«¡ ”·⁄…")
+						.text(" «—ÌŒ «‰ Â«¡ " + rs.getString("name") + "\n" + rs.getDate("exp_date").toLocalDate())
+						.graphic(null).position(Pos.BOTTOM_RIGHT).darkStyle().hideAfter(Duration.INDEFINITE);
+
+				notifications.showWarning();
+
+			}
+
+		}
+
 	}
 
 }

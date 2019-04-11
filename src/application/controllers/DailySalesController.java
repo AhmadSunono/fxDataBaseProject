@@ -93,7 +93,6 @@ public class DailySalesController implements Initializable {
 			}
 
         for(int i=0;i<data.size();i++) {
-        	System.out.println(data.get(i).getQuant()*(data.get(i).getSellPrice()-data.get(i).getBuyPrice()));
             totalprofit+=data.get(i).getProfit();
             sellprice+=data.get(i).getTotalSellPrice();
         }
