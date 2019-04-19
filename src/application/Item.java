@@ -107,7 +107,7 @@ public class Item {
 }
 
 
-class BoughtItem extends Item{
+/*class BoughtItem extends Item{
 	
 	int quant;
 	LocalDate buyingDate;
@@ -154,4 +154,4 @@ class BoughtItem extends Item{
 	
 	
 	
-}
+}*/

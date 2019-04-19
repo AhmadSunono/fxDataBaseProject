@@ -142,9 +142,9 @@ public class MainController implements Initializable {
 
 //			   } else {
 //				   Alert alert = new Alert(AlertType.WARNING);
-//				   alert.setTitle("ÈíÇäÇÊ ÏÎæá ÎÇØÆÉ");
+//				   alert.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½");
 //				   alert.setHeaderText(null);
-//				   alert.setContentText("ÇáÑÌÇÁ ÇáÊÃßÏ ãä ÇÓã ÇáãÓÊÎÏã Ãæ ßáãÉ ÇáãÑæÑ");
+//				   alert.setContentText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 //				   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
 //				   stage.getIcons().add(new Image("/application/images/icon.png"));
 //
@@ -179,7 +179,7 @@ public class MainController implements Initializable {
 	public void checkDates() throws SQLException {
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
 		Statement statement = connection.createStatement();
 		String q = "select name,exp_date from stored";
 		ResultSet rs = statement.executeQuery(q);
@@ -191,8 +191,8 @@ public class MainController implements Initializable {
 			diff = Period.between(now, rs.getDate("exp_date").toLocalDate()).getMonths();
 			diff2 = Period.between(now, rs.getDate("exp_date").toLocalDate()).getYears();
 			if (diff < 1 && diff2 < 1) {
-				Notifications notifications = Notifications.create().title("ÊäÈíå ÅÞÊÑÇÈ ÊÇÑíÎ ÅäÊåÇÁ ÓáÚÉ")
-						.text("ÊÇÑíÎ ÇäÊåÇÁ " + rs.getString("name") + "\n" + rs.getDate("exp_date").toLocalDate())
+				Notifications notifications = Notifications.create().title("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
+						.text("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " + rs.getString("name") + "\n" + rs.getDate("exp_date").toLocalDate())
 						.graphic(null).position(Pos.BOTTOM_RIGHT).darkStyle().hideAfter(Duration.INDEFINITE);
 
 				notifications.showWarning();
