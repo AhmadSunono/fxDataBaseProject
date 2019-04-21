@@ -123,7 +123,9 @@ public class MainController implements Initializable {
 			stack.getChildren()
 					.add((AnchorPane) FXMLLoader.load(getClass().getResource("/application/fxml/ImportBill.fxml")));
 		} else if (event.getSource().toString().contains("importBillsButton")) {
-
+			stack.getChildren().clear();
+			stack.getChildren()
+					.add((AnchorPane) FXMLLoader.load(getClass().getResource("/application/fxml/ImportBills.fxml")));
 		} else if (event.getSource().toString().contains("backupButton")) {
 
 		} else if (event.getSource().toString().contains("login")) {
@@ -179,7 +181,7 @@ public class MainController implements Initializable {
 	public void checkDates() throws SQLException {
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
 		Statement statement = connection.createStatement();
 		String q = "select name,exp_date from stored";
 		ResultSet rs = statement.executeQuery(q);
@@ -191,8 +193,10 @@ public class MainController implements Initializable {
 			diff = Period.between(now, rs.getDate("exp_date").toLocalDate()).getMonths();
 			diff2 = Period.between(now, rs.getDate("exp_date").toLocalDate()).getYears();
 			if (diff < 1 && diff2 < 1) {
-				Notifications notifications = Notifications.create().title("����� ������ ����� ������ ����")
-						.text("����� ������ " + rs.getString("name") + "\n" + rs.getDate("exp_date").toLocalDate())
+				Notifications notifications = Notifications.create()
+						.title("����� ������ ����� ������ ����")
+						.text("����� ������ " + rs.getString("name") + "\n"
+								+ rs.getDate("exp_date").toLocalDate())
 						.graphic(null).position(Pos.BOTTOM_RIGHT).darkStyle().hideAfter(Duration.INDEFINITE);
 
 				notifications.showWarning();

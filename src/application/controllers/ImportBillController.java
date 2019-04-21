@@ -34,7 +34,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import oracle.sql.DATE;
 
 public class ImportBillController implements Initializable {
 
@@ -102,8 +101,8 @@ public class ImportBillController implements Initializable {
 
 			// Data Base Query
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q = "";
 
@@ -145,7 +144,7 @@ public class ImportBillController implements Initializable {
 						int count = 0;
 						int count2 = 0;
 						int count3 = 0;
-						q = "select * from stored where barcode between '000000001'and '000001000'";
+						q = "select * from stored where barcode between '000000000'and '000001000'";
 						ResultSet rs = statement.executeQuery(q);
 						while (rs.next()) {
 							count3++;
@@ -277,7 +276,7 @@ public class ImportBillController implements Initializable {
 						int countb = 0;
 						int count2 = 0;
 						int count3 = 0;
-						q = "select * from stored where barcode between '000000001'and '000001000'";
+						q = "select * from stored where barcode between '000000000'and '000001000'";
 						ResultSet rss = statement.executeQuery(q);
 						while (rss.next()) {
 							count3++;
@@ -355,8 +354,8 @@ public class ImportBillController implements Initializable {
 				
 				// Data Base Query
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				String q = "";
 
