@@ -71,8 +71,8 @@ public class SellViewController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q="delete from stored where quantity<=0";
 			statement.executeUpdate(q);
@@ -120,8 +120,8 @@ public class SellViewController implements Initializable {
 					try {
 						DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 					
-						Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-								"11");
+						Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+								"112233");
 						Statement statement = connection.createStatement();
 					String q = "update stored set quantity=quantity-"+ itemsData.get(i).getQuant()+" where name='"+itemsData.get(i).getName()+"'";
 				    statement.executeUpdate(q);
@@ -202,8 +202,8 @@ public class SellViewController implements Initializable {
 
 		if (event.getSource().toString().contains("itemNameTF")) {
 			if (event.getCode().equals(KeyCode.ENTER)) {
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				String q = "";
 

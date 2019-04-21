@@ -110,8 +110,8 @@ public class StoreInventoryController implements Initializable {
 		
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(
 					"update stored set exp_date=TO_DATE('"+date+"','YYYY-MM-DD') where barcode='" + barcode + "'");
@@ -133,8 +133,8 @@ public class StoreInventoryController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q = "delete from stored where quantity<=0";
 			statement.executeUpdate(q);
@@ -192,8 +192,8 @@ public class StoreInventoryController implements Initializable {
 			e.getTableView().getItems().get(e.getTablePosition().getRow()).setBarcode(e.getNewValue());
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
 						"update stored set barcode='" + e.getNewValue() + "' where barcode='" + e.getOldValue() + "'");
@@ -234,8 +234,8 @@ public class StoreInventoryController implements Initializable {
 			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
 						"update stored set quantity='" + e.getNewValue() + "' where barcode='" + barcode + "'");
@@ -255,8 +255,8 @@ public class StoreInventoryController implements Initializable {
 			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
 						"update stored set buy_price='" + e.getNewValue() + "' where barcode='" + barcode + "'");
