@@ -102,8 +102,8 @@ public class ImportBillController implements Initializable {
 
 			// Data Base Query
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
-					"112233");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
+					"11");
 			Statement statement = connection.createStatement();
 			String q = "";
 
@@ -355,31 +355,276 @@ public class ImportBillController implements Initializable {
 				
 				// Data Base Query
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
-						"112233");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
+						"11");
 				Statement statement = connection.createStatement();
 				String q = "";
 
 
 				// barcode written
-				if (true) {
-					// barcode exist in database
-					if (true) {
+				if (!barcodeReader.getText().equals("")) {
+					int count=0;
+					q="select * from stored where barcode='"+barcodeReader.getText()+"'";
+					ResultSet rs=statement.executeQuery(q);
+					while(rs.next()) {count++;}
+					
+					if (count==0) {
 						// barcode is new
-					} else {
+						Dialog<String> nameDialog = new Dialog<>();
+						nameDialog.setTitle("اسم السلعة");
+						nameDialog.setHeaderText("الرجاء ادخال اسم السلعة");
 
+						Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
+						stage2.getIcons().add(new Image("/application/images/icon.png"));
+
+						TextField nameTF = new TextField("");
+						TextFields.bindAutoCompletion(nameTF, storedItems);
+						nameDialog.getDialogPane().setContent(nameTF);
+
+						ButtonType buttonTypeOk2 = new ButtonType("تأكيد", ButtonData.OK_DONE);
+						nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
+
+						nameDialog.setResultConverter(new Callback<ButtonType, String>() {
+							@Override
+							public String call(ButtonType b) {
+
+								if (b == buttonTypeOk2) {
+
+									return nameTF.getText();
+								}
+
+								return null;
+							}
+						});
+
+						itemName = nameDialog.showAndWait().get();
+						TextInputDialog dialog = new TextInputDialog();
+
+//			             
+							dialog = new TextInputDialog();
+							dialog.setTitle("الكمية");
+							dialog.setHeaderText("الرجاء ادخل الكمية");
+							quant = Integer.parseInt(dialog.showAndWait().get());
+//			             
+							dialog = new TextInputDialog();
+							dialog.setTitle("سعر شراء الوحدة");
+							dialog.setHeaderText("الرجاء ادخال سعر شراء الوحدة");
+							buyPrice = Double.parseDouble(dialog.showAndWait().get());
+//			             
+							dialog = new TextInputDialog();
+							dialog.setTitle("سعر بيع الوحدة");
+							dialog.setHeaderText("الرجاء ادخال سعر بيع الوحدة");
+							sellPrice = Double.parseDouble(dialog.showAndWait().get());
+
+							// show Calender dialog
+							Dialog<LocalDate> dateDialog = new Dialog<>();
+							dateDialog.setTitle("تاريخ انتهاء السلعة");
+							dateDialog.setHeaderText("الرجاء ادخال تاريخ انتهاء السلعة");
+
+							Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+
+							DatePicker datePicker = new DatePicker();
+							dateDialog.getDialogPane().setContent(datePicker);
+
+							ButtonType buttonTypeOk = new ButtonType("تأكيد", ButtonData.OK_DONE);
+							dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+							dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+								@Override
+								public LocalDate call(ButtonType b) {
+
+									if (b == buttonTypeOk) {
+
+										return datePicker.getValue();
+									}
+
+									return null;
+								}
+							});
+
+							expDate = dateDialog.showAndWait().get();
+						
+						
+						
+						
+					} else {
+						rs=statement.executeQuery(q);
+						
+						TextInputDialog dialog = new TextInputDialog();
+
+						dialog = new TextInputDialog();
+						dialog.setTitle("الكمية");
+						dialog.setHeaderText("الرجاء ادخل الكمية");
+						quant = Integer.parseInt(dialog.showAndWait().get());
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						dateDialog.setTitle("تاريخ انتهاء السلعة");
+						dateDialog.setHeaderText("الرجاء ادخال تاريخ انتهاء السلعة");
+
+						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("/application/images/icon.png"));
+
+						DatePicker datePicker = new DatePicker();
+						dateDialog.getDialogPane().setContent(datePicker);
+
+						ButtonType buttonTypeOk = new ButtonType("تأكيد", ButtonData.OK_DONE);
+						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+							@Override
+							public LocalDate call(ButtonType b) {
+
+								if (b == buttonTypeOk) {
+
+									return datePicker.getValue();
+								}
+
+								return null;
+							}
+						});
+
+						expDate = dateDialog.showAndWait().get();
+					sellPrice=rs.getDouble("sell_price");
+ 					buyPrice=rs.getDouble("buy_price");
+                    itemName=rs.getString("Name");
+ 					
 					}
 				}
 				//barcode not written
 				else {
 					// ask for the name
 					////////
-					if (true) {
+					Dialog<String> nameDialog = new Dialog<>();
+					nameDialog.setTitle("اسم السلعة");
+					nameDialog.setHeaderText("الرجاء ادخال اسم السلعة");
+
+					Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
+					stage2.getIcons().add(new Image("/application/images/icon.png"));
+
+					TextField nameTF = new TextField("");
+					TextFields.bindAutoCompletion(nameTF, storedItems);
+					nameDialog.getDialogPane().setContent(nameTF);
+
+					ButtonType buttonTypeOk2 = new ButtonType("تأكيد", ButtonData.OK_DONE);
+					nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
+
+					nameDialog.setResultConverter(new Callback<ButtonType, String>() {
+						@Override
+						public String call(ButtonType b) {
+
+							if (b == buttonTypeOk2) {
+
+								return nameTF.getText();
+							}
+
+							return null;
+						}
+					});
+
+					itemName = nameDialog.showAndWait().get();
+					
+					q="select * from stored where name='"+itemName+"'";
+					int count=0;
+					ResultSet rs=statement.executeQuery(q);
+					while(rs.next()) {count++;}
+					
+					if (count!=0) {
 						// ask for date & quant
+						rs=statement.executeQuery(q);
+						rs.next();
+						sellPrice=rs.getDouble("sell_price");
+						buyPrice=rs.getDouble("buy_price");
+						TextInputDialog dialog = new TextInputDialog();
+
+						dialog = new TextInputDialog();
+						dialog.setTitle("الكمية");
+						dialog.setHeaderText("الرجاء ادخل الكمية");
+						quant = Integer.parseInt(dialog.showAndWait().get());
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						dateDialog.setTitle("تاريخ انتهاء السلعة");
+						dateDialog.setHeaderText("الرجاء ادخال تاريخ انتهاء السلعة");
+
+						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("/application/images/icon.png"));
+
+						DatePicker datePicker = new DatePicker();
+						dateDialog.getDialogPane().setContent(datePicker);
+
+						ButtonType buttonTypeOk = new ButtonType("تأكيد", ButtonData.OK_DONE);
+						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+							@Override
+							public LocalDate call(ButtonType b) {
+
+								if (b == buttonTypeOk) {
+
+									return datePicker.getValue();
+								}
+
+								return null;
+							}
+						});
+
+						expDate = dateDialog.showAndWait().get();
+						
 					}
 
 					else {
 						// ask for everything
+						
+						
+						
+						
+						TextInputDialog dialog = new TextInputDialog();
+
+//		             
+						dialog = new TextInputDialog();
+						dialog.setTitle("الكمية");
+						dialog.setHeaderText("الرجاء ادخل الكمية");
+						quant = Integer.parseInt(dialog.showAndWait().get());
+//		             
+						dialog = new TextInputDialog();
+						dialog.setTitle("سعر شراء الوحدة");
+						dialog.setHeaderText("الرجاء ادخال سعر شراء الوحدة");
+						buyPrice = Double.parseDouble(dialog.showAndWait().get());
+//		             
+						dialog = new TextInputDialog();
+						dialog.setTitle("سعر بيع الوحدة");
+						dialog.setHeaderText("الرجاء ادخال سعر بيع الوحدة");
+						sellPrice = Double.parseDouble(dialog.showAndWait().get());
+
+						// show Calender dialog
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						dateDialog.setTitle("تاريخ انتهاء السلعة");
+						dateDialog.setHeaderText("الرجاء ادخال تاريخ انتهاء السلعة");
+
+						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("/application/images/icon.png"));
+
+						DatePicker datePicker = new DatePicker();
+						dateDialog.getDialogPane().setContent(datePicker);
+
+						ButtonType buttonTypeOk = new ButtonType("تأكيد", ButtonData.OK_DONE);
+						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+							@Override
+							public LocalDate call(ButtonType b) {
+
+								if (b == buttonTypeOk) {
+
+									return datePicker.getValue();
+								}
+
+								return null;
+							}
+						});
+
+						expDate = dateDialog.showAndWait().get();
+
+						
+						
 					}
 				}
 
@@ -400,7 +645,7 @@ public class ImportBillController implements Initializable {
 				 */
 
 				// show ItemName Dialog
-				Dialog<String> nameDialog = new Dialog<>();
+			/*	Dialog<String> nameDialog = new Dialog<>();
 				nameDialog.setTitle("اسم السلعة");
 				nameDialog.setHeaderText("الرجاء ادخال اسم السلعة");
 
@@ -477,7 +722,7 @@ public class ImportBillController implements Initializable {
 				});
 
 				expDate = dateDialog.showAndWait().get();
-
+*/
 				//to here
 //
 //              System.out.println(barcode+"    "+itemName+"    "+quant+"    "+buyPrice+"    "+sellPrice+"  "+expDate);
