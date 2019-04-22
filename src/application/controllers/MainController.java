@@ -181,7 +181,7 @@ public class MainController implements Initializable {
 	public void checkDates() throws SQLException {
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
 		Statement statement = connection.createStatement();
 		String q = "select name,exp_date from stored";
 		ResultSet rs = statement.executeQuery(q);

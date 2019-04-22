@@ -3,9 +3,15 @@ package application.controllers;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import application.BoughtItem;
+import application.Item;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -25,8 +32,11 @@ import net.sf.jasperreports.view.JasperViewer;
 
 public class ImportBillsController implements Initializable {
 
+	ObservableList<BoughtItem> data = FXCollections.observableArrayList();
+
+	
     @FXML
-    private TableView<?> table;
+    private TableView<BoughtItem> table;
 
     @FXML
     private TableColumn<?, ?> nameColumn;
@@ -49,12 +59,16 @@ public class ImportBillsController implements Initializable {
     @FXML
     void buttonHandler(ActionEvent event) throws SQLException, JRException {
     	
+    	
+    	
+    	
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
 
+		BoughtItem m=table.getSelectionModel().getSelectedItem();
     	
     	JasperDesign jd=JRXmlLoader.load("JasperReport.jrxml");
-    	String q="select * from buying_bill,bought where buying_bill.bar=bought.barcode";
+    	String q="select * from buying_bill,bought where buying_bill.bar=bought.barcode and supplier_name='"+m.getSupplierName()+"' and buying_date=TO_DATE('"+m.getBuyingDate()+"','YYYY-MM-DD')";
     	JRDesignQuery newQuery=new JRDesignQuery();
     	newQuery.setText(q);
     	jd.setQuery(newQuery);
@@ -81,6 +95,10 @@ public class ImportBillsController implements Initializable {
 //                stage.setAlwaysOnTop(true);
 //                stage.setScene(scene);
 //                stage.showAndWait();
+    	
+    	
+    	
+    	
 
     	
     }
@@ -88,6 +106,54 @@ public class ImportBillsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		try {
+			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+
+			Statement statement=connection.createStatement();
+			String q="select distinct supplier_name,Buying_date  from buying_bill ";
+			ResultSet rs=statement.executeQuery(q);
+			while(rs.next()) {
+				data.add(new BoughtItem("","",0,0,0,rs.getDate("Buying_date").toLocalDate(),rs.getString("Supplier_name")));
+			}
+			
+			
+			table.setItems(data);
+			nameColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+			dateColumn.setCellValueFactory(new PropertyValueFactory<>("buyingDate"));
+			
+			table.getSelectionModel().selectedItemProperty().addListener(
+		            (observable, oldValue, newValue) -> {//your code here
+
+		            	nameTF.setText(newValue.getSupplierName());
+		            	dateTF.setText(newValue.getBuyingDate()+"");
+		            	String s="select * from supplier where supplier_name='"+newValue.getSupplierName()+"'";
+		            	try {
+							ResultSet rss=statement.executeQuery(s);							
+               
+//							while(
+							rss.next();
+							//) {
+	                phoneTF.setText(rss.getString("phone_number"));
+//          }			
+							
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		            	
+		            	
+		               }
+		            
+					);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 		
 	}
 
