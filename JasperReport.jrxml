@@ -7,6 +7,8 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="date" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select * from buying_bill,bought where buying_bill.bar=bought.barcode]]>
 	</queryString>
@@ -32,7 +34,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="70" splitType="Stretch">
+		<band height="122" splitType="Stretch">
 			<image>
 				<reportElement x="275" y="0" width="300" height="64" uuid="88796d59-cd8c-43c1-853f-dd6acfa88258"/>
 				<imageExpression><![CDATA["leaf_banner_violet.png"]]></imageExpression>
@@ -47,6 +49,34 @@
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[فاتورة شراء]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="444" y="80" width="111" height="15" uuid="54e42ead-ed04-428f-8e5f-dde1d039b53d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ca659f7-f697-4291-9377-ad7391f169bb"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[اسم الموزع:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="190" y="80" width="111" height="15" uuid="4446a5d6-1f94-48ec-8f70-877c76c7dd38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ca659f7-f697-4291-9377-ad7391f169bb"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[تاريخ الفاتورة:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="301" y="80" width="138" height="14" uuid="d987a90c-1242-4ce3-91b5-eb057baac560"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="80" width="146" height="14" uuid="8274bc63-c5d6-4e6d-bdb7-ce9311bb063d"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -178,13 +208,6 @@
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="e16da2cc-f2dd-4b0a-a299-981148326ee6"/>
-				<textElement>
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

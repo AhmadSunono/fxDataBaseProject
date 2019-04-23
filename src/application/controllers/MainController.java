@@ -133,8 +133,8 @@ public class MainController implements Initializable {
 		} else if (event.getSource().toString().contains("backupButton")) {
 
 		} else if (event.getSource().toString().contains("login")) {
-			//Username and Password
-//			   if(username.getText().toString().equalsIgnoreCase("Apache") && password.getText().toString().equals("22023202")) {
+//			Username and Password
+			   if(username.getText().toString().equalsIgnoreCase("Apache") && password.getText().toString().equals("22023202")) {
 			Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5),
 					new KeyValue(menu.translateXProperty(), 0, Interpolator.EASE_IN)));
 			stack.getChildren().remove(loginForm);
@@ -147,16 +147,16 @@ public class MainController implements Initializable {
 				e.printStackTrace();
 			}
 
-//			   } else {
-//			   Alert alert = new Alert(AlertType.WARNING);
-//			   alert.setTitle("»Ì«‰«  œŒÊ· Œ«ÿ∆…");
-//			   alert.setHeaderText(null);
-//			   alert.setContentText("«·—Ã«¡ «· √ﬂœ „‰ «”„ «·„” Œœ„ √Ê ﬂ·„… «·„—Ê—");
-//			   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
-//			   stage.getIcons().add(new Image("/application/images/icon.png"));
-//
-//			   alert.showAndWait();
-//		   }
+			   } else {
+			   Alert alert = new Alert(AlertType.WARNING);
+			   alert.setTitle("»Ì«‰«  œŒÊ· Œ«ÿ∆…");
+			   alert.setHeaderText(null);
+			   alert.setContentText("«·—Ã«¡ «· √ﬂœ „‰ «”„ «·„” Œœ„ √Ê ﬂ·„… «·„—Ê—");
+			   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+			   stage.getIcons().add(new Image("/application/images/icon.png"));
+
+			   alert.showAndWait();
+		   }
 
 		} else if (event.getSource().toString().contains("signOutButton")) {
 			signOut();

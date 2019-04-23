@@ -216,6 +216,7 @@ public class SellViewController implements Initializable {
 					   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
 					   stage.getIcons().add(new Image("/application/images/icon.png"));
 					   alert.showAndWait();
+					
 				}
 
 		if (event.getSource().toString().contains("itemNameTF")) {
@@ -228,7 +229,7 @@ public class SellViewController implements Initializable {
 				ResultSet rs = statement.executeQuery(q);
 				rs.next();
 				try {
-					showInTable(barcodeTF.getText());
+					showInTable(rs.getString("barcode"));
 				} catch (Exception e) {
 					   Alert alert = new Alert(AlertType.WARNING);
 					   alert.setTitle("«·”·⁄… €Ì— „ÊÃÊœ…");
@@ -237,6 +238,7 @@ public class SellViewController implements Initializable {
 					   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
 					   stage.getIcons().add(new Image("/application/images/icon.png"));
 					   alert.showAndWait();
+					   e.printStackTrace();
 				}
 			}
 
