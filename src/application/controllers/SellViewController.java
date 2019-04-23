@@ -19,13 +19,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 public class SellViewController implements Initializable {
 
@@ -71,8 +75,7 @@ public class SellViewController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 			Statement statement = connection.createStatement();
 			String q="delete from stored where quantity<=0";
 			statement.executeUpdate(q);
@@ -106,10 +109,16 @@ public class SellViewController implements Initializable {
 			}
 			/// After the query clear the table
 			if(itemsData.size() == 0) {
-				//ŸáŸàŸÜ ÿ®ÿØŸä ÿØŸäÿßŸÑŸàÿ¨ Ÿäÿ≠ŸÉŸä ÿßŸÜŸà ŸÅÿ¥ ÿßŸäÿ™ŸäŸÖÿ≤ ŸÅŸÉ ÿπŸÜŸä Ÿäÿß ŸÉŸÑÿ®
-				//Dialog<String> nullDialog = new Dialog<>();
-                //nullDialog.setTitle("ÿ∫Ÿäÿ± ŸÖÿ™ŸàÿßŸÅÿ±");
-				//nullDialog.setContentText("ŸÜÿπÿ™ÿ∞ÿ± ŸàŸÑŸÉŸÜ ŸÑÿß ŸäŸàÿ¨ÿØ ÿßŸä ÿ≥ŸÑÿπ ŸÑŸÑÿ®Ÿäÿπ !");
+					//empty table
+				   Alert alert = new Alert(AlertType.WARNING);
+				   alert.setTitle("›« Ê—… ›«—€…");
+				   alert.setHeaderText(null);
+				   alert.setContentText("«·›« Ê—… ›«—€…° «·—Ã«¡  ⁄»∆… «·”·⁄ «Ê·«");
+				   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+				   stage.getIcons().add(new Image("/application/images/icon.png"));
+				   alert.showAndWait();
+
+				
 				
 			}
 			
@@ -120,8 +129,7 @@ public class SellViewController implements Initializable {
 					try {
 						DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 					
-						Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-								"11");
+						Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 						Statement statement = connection.createStatement();
 					String q = "update stored set quantity=quantity-"+ itemsData.get(i).getQuant()+" where name='"+itemsData.get(i).getName()+"'";
 				    statement.executeUpdate(q);
@@ -198,19 +206,38 @@ public class SellViewController implements Initializable {
 
 		if (event.getSource().toString().contains("barcodeTF"))
 			if (event.getCode().equals(KeyCode.ENTER))
-				showInTable(barcodeTF.getText());
+				try {
+					showInTable(barcodeTF.getText());
+				} catch (Exception e) {
+					   Alert alert = new Alert(AlertType.WARNING);
+					   alert.setTitle("«·”·⁄… €Ì— „ÊÃÊœ…");
+					   alert.setHeaderText(null);
+					   alert.setContentText("«·”·⁄… €Ì— „”Ã·… »«·„Œ“‰° «·—Ã«¡  Œ“Ì‰Â« √Ê·«");
+					   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+					   stage.getIcons().add(new Image("/application/images/icon.png"));
+					   alert.showAndWait();
+				}
 
 		if (event.getSource().toString().contains("itemNameTF")) {
 			if (event.getCode().equals(KeyCode.ENTER)) {
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 				Statement statement = connection.createStatement();
 				String q = "";
 
 				q = "select barcode from stored where name='" + itemNameTF.getText() + "'";
 				ResultSet rs = statement.executeQuery(q);
 				rs.next();
-				showInTable(rs.getString("barcode"));
+				try {
+					showInTable(barcodeTF.getText());
+				} catch (Exception e) {
+					   Alert alert = new Alert(AlertType.WARNING);
+					   alert.setTitle("«·”·⁄… €Ì— „ÊÃÊœ…");
+					   alert.setHeaderText(null);
+					   alert.setContentText("«·”·⁄… €Ì— „”Ã·… »«·„Œ“‰° «·—Ã«¡  Œ“Ì‰Â« √Ê·«");
+					   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+					   stage.getIcons().add(new Image("/application/images/icon.png"));
+					   alert.showAndWait();
+				}
 			}
 
 		}
@@ -218,8 +245,7 @@ public class SellViewController implements Initializable {
 
 	public void showInTable(String barcode) throws SQLException {
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-				"11");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 		Statement statement = connection.createStatement();
 		String q = "";
 

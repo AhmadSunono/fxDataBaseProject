@@ -24,13 +24,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class MainController implements Initializable {
@@ -129,7 +133,8 @@ public class MainController implements Initializable {
 		} else if (event.getSource().toString().contains("backupButton")) {
 
 		} else if (event.getSource().toString().contains("login")) {
-//			   if(username.getText().toString().equals("Apache") && password.getText().toString().equals("22023202")) {
+			//Username and Password
+//			   if(username.getText().toString().equalsIgnoreCase("Apache") && password.getText().toString().equals("22023202")) {
 			Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5),
 					new KeyValue(menu.translateXProperty(), 0, Interpolator.EASE_IN)));
 			stack.getChildren().remove(loginForm);
@@ -143,15 +148,15 @@ public class MainController implements Initializable {
 			}
 
 //			   } else {
-//				   Alert alert = new Alert(AlertType.WARNING);
-//				   alert.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½");
-//				   alert.setHeaderText(null);
-//				   alert.setContentText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
-//				   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
-//				   stage.getIcons().add(new Image("/application/images/icon.png"));
+//			   Alert alert = new Alert(AlertType.WARNING);
+//			   alert.setTitle("ÈíÇäÇÊ ÏÎæá ÎÇØÆÉ");
+//			   alert.setHeaderText(null);
+//			   alert.setContentText("ÇáÑÌÇÁ ÇáÊÃßÏ ãä ÇÓã ÇáãÓÊÎÏã Ãæ ßáãÉ ÇáãÑæÑ");
+//			   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+//			   stage.getIcons().add(new Image("/application/images/icon.png"));
 //
-//				   alert.showAndWait();
-//			   }
+//			   alert.showAndWait();
+//		   }
 
 		} else if (event.getSource().toString().contains("signOutButton")) {
 			signOut();
@@ -181,7 +186,7 @@ public class MainController implements Initializable {
 	public void checkDates() throws SQLException {
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad", "112233");
 		Statement statement = connection.createStatement();
 		String q = "select name,exp_date from stored";
 		ResultSet rs = statement.executeQuery(q);
@@ -193,10 +198,8 @@ public class MainController implements Initializable {
 			diff = Period.between(now, rs.getDate("exp_date").toLocalDate()).getMonths();
 			diff2 = Period.between(now, rs.getDate("exp_date").toLocalDate()).getYears();
 			if (diff < 1 && diff2 < 1) {
-				Notifications notifications = Notifications.create()
-						.title("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
-						.text("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " + rs.getString("name") + "\n"
-								+ rs.getDate("exp_date").toLocalDate())
+				Notifications notifications = Notifications.create().title("ÊäÈíå ÅÞÊÑÇÈ ÊÇÑíÎ ÅäÊåÇÁ ÓáÚÉ")
+						.text("ÊÇÑíÎ ÇäÊåÇÁ " + rs.getString("name") + "\n" + rs.getDate("exp_date").toLocalDate())
 						.graphic(null).position(Pos.BOTTOM_RIGHT).darkStyle().hideAfter(Duration.INDEFINITE);
 
 				notifications.showWarning();

@@ -15,11 +15,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -59,48 +63,30 @@ public class ImportBillsController implements Initializable {
     @FXML
     void buttonHandler(ActionEvent event) throws SQLException, JRException {
     	
-    	
-    	
-    	
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+		try {
+			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 
-		BoughtItem m=table.getSelectionModel().getSelectedItem();
-    	
-    	JasperDesign jd=JRXmlLoader.load("JasperReport.jrxml");
-    	String q="select * from buying_bill,bought where buying_bill.bar=bought.barcode and supplier_name='"+m.getSupplierName()+"' and buying_date=TO_DATE('"+m.getBuyingDate()+"','YYYY-MM-DD')";
-    	JRDesignQuery newQuery=new JRDesignQuery();
-    	newQuery.setText(q);
-    	jd.setQuery(newQuery);
-    	
-    	JasperReport jr=JasperCompileManager.compileReport(jd);
-    	JasperPrint jp=JasperFillManager.fillReport(jr, null,connection);
-    	JasperViewer.viewReport(jp,false);
-    	
-//        SwingNode swingNode = new SwingNode();
-//        swingNode.setContent(new JRViewer(jp));
-//
-//        AnchorPane anchorPane = new AnchorPane();
-//
-//        AnchorPane.setTopAnchor(swingNode,0.0);
-//        AnchorPane.setBottomAnchor(swingNode,0.0);
-//        AnchorPane.setLeftAnchor(swingNode,0.0);
-//        AnchorPane.setRightAnchor(swingNode,0.0);
-//
-//        anchorPane.getChildren().add(swingNode);
-//        Scene scene = new Scene(anchorPane);
-//        Stage stage = new Stage();
-//                stage.setHeight(550);
-//                stage.setWidth(600);
-//                stage.setAlwaysOnTop(true);
-//                stage.setScene(scene);
-//                stage.showAndWait();
-    	
-    	
-    	
-    	
-
-    	
+			BoughtItem m=table.getSelectionModel().getSelectedItem();
+			
+			JasperDesign jd=JRXmlLoader.load("JasperReport.jrxml");
+			String q="select * from buying_bill,bought where buying_bill.bar=bought.barcode and supplier_name='"+m.getSupplierName()+"' and buying_date=TO_DATE('"+m.getBuyingDate()+"','YYYY-MM-DD')";
+			JRDesignQuery newQuery=new JRDesignQuery();
+			newQuery.setText(q);
+			jd.setQuery(newQuery);
+			
+			JasperReport jr=JasperCompileManager.compileReport(jd);
+			JasperPrint jp=JasperFillManager.fillReport(jr, null,connection);
+			JasperViewer.viewReport(jp,false);
+		} catch (Exception e) {
+			   Alert alert = new Alert(AlertType.WARNING);
+			   alert.setTitle("·„  ﬁ„ »≈Œ Ì«— ›« Ê—…");
+			   alert.setHeaderText(null);
+			   alert.setContentText("«·—Ã«¡ ≈Œ Ì«— ›« Ê—… ·⁄—÷Â«");
+			   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
+			   stage.getIcons().add(new Image("/application/images/icon.png"));
+			   alert.showAndWait();
+		}
     }
 
 	@Override
@@ -108,7 +94,7 @@ public class ImportBillsController implements Initializable {
 		// TODO Auto-generated method stub
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad", "11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
 
 			Statement statement=connection.createStatement();
 			String q="select distinct supplier_name,Buying_date  from buying_bill ";

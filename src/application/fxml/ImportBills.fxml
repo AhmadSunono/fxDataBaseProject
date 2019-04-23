@@ -50,6 +50,6 @@
             </TextField>
          </children>
       </GridPane>
-      <Button fx:id="viewBillButton" layoutX="170.0" layoutY="422.0" mnemonicParsing="false" onAction="#buttonHandler" styleClass="main" stylesheets="@fxDataBaseProject2/src/application/style.css" text="عرض الفاتورة" />
+      <Button fx:id="viewBillButton" layoutX="170.0" layoutY="422.0" mnemonicParsing="false" onAction="#buttonHandler" styleClass="main" stylesheets="@../style.css" text="عرض الفاتورة" />
    </children>
 </AnchorPane>

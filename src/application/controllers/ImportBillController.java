@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -91,18 +93,25 @@ public class ImportBillController implements Initializable {
 
 	@FXML
 	void buttonHandler(ActionEvent event) throws SQLException {
+
 		if (event.getSource().toString().contains("saveButton")) {
 
-			// Ù‡ÙˆÙ† Ø¨Ù†Ø´ÙˆÙ Ø§ÙˆÙ„ Ø§Ø´ÙŠ ÙÙŠ Ø§Ø³Ù… Ù…ÙˆØ²Ø¹ ÙˆÙ„Ø§ Ù„Ø£ØŒ Ø§Ø°Ø§
-			// Ù„Ø§ Ø®Ù„Øµ Ø¨Ù†Ø¶ÙŠÙ Ø¹Ø§Ù„Ø³ØªÙˆØ± Ù…Ø¨Ø§Ø´Ø±Ø© Ø¨Ø¯ÙˆÙ† Ø¨ÙˆØª Ø§ÙŠØªÙ…
-			// Ø§Ø°Ø§ Ø§Ù‡ Ø¨Ù†Ø¹Ù…Ù„ Ø§Ù„ÙƒÙˆÙŠØ±ÙŠ Ù‡Ø§ÙŠ Ø§Ù„ÙŠ ØªØ­Øª
-			// Ø¨Ø¹Ø¯ÙŠÙ† Ø¨Ù†Ø­Ø¯Ø« Ø§Ù„Ø³ØªÙˆØ± ØªØ­Ø¯ÙŠØ« ØŒØ§Ø°Ø§ Ø§Ù„Ø§ÙŠØªÙ…Ø²
-			// Ù…ÙˆØ¬ÙˆØ¯Ø§Øª Ø¨Ù†Ø²ÙŠØ¯ Ø¹Ù„ÙŠÙ‡Ù… ÙˆØ§Ø°Ø§ Ù„Ø§ Ø¨Ù†Ø¶ÙŠÙÙ‡Ù…
+			if (data.size() == 0) {
+				// empty table
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("İÇÊæÑÉ İÇÑÛÉ");
+				alert.setHeaderText(null);
+				alert.setContentText("ÇáİÇÊæÑÉ İÇÑÛÉ¡ ÇáÑÌÇÁ ÊÚÈÆÉ ÇáÓáÚ ÇæáÇğ");
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("/application/images/icon.png"));
+				alert.showAndWait();
+
+			}
 
 			// Data Base Query
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-					"11");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q = "";
 
@@ -339,6 +348,11 @@ public class ImportBillController implements Initializable {
 
 		}
 
+		else {
+			data.clear();
+			table.refresh();
+		}
+
 	}
 
 	@FXML
@@ -346,32 +360,244 @@ public class ImportBillController implements Initializable {
 		String barcode = "", itemName = "";
 		int quant = 0;
 		double buyPrice = 0, sellPrice = 0, totalBP = 0, totalSP = 0;
-		LocalDate expDate;
+		LocalDate expDate = null;
+		boolean cancle = false;
 
 		if (event.getSource().toString().contains("barcodeReader"))
 			if (event.getCode().equals(KeyCode.ENTER)) {
 				barcode = barcodeReader.getText();
-				
+
 				// Data Base Query
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "imad",
-						"11");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				String q = "";
 
-
 				// barcode written
 				if (!barcodeReader.getText().equals("")) {
-					int count=0;
-					q="select * from stored where barcode='"+barcodeReader.getText()+"'";
-					ResultSet rs=statement.executeQuery(q);
-					while(rs.next()) {count++;}
-					
-					if (count==0) {
+					int count = 0;
+					q = "select * from stored where barcode='" + barcodeReader.getText() + "'";
+					ResultSet rs = statement.executeQuery(q);
+					while (rs.next()) {
+						count++;
+					}
+
+					if (count == 0) {
 						// barcode is new
 						Dialog<String> nameDialog = new Dialog<>();
-						nameDialog.setTitle("Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
-						nameDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
+						try {
+							nameDialog.setTitle("ÇÓã ÇáÓáÚÉ");
+							nameDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÇÓã ÇáÓáÚÉ");
+
+							Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
+							stage2.getIcons().add(new Image("/application/images/icon.png"));
+
+							TextField nameTF = new TextField("");
+							TextFields.bindAutoCompletion(nameTF, storedItems);
+							nameDialog.getDialogPane().setContent(nameTF);
+
+							ButtonType buttonTypeOk2 = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+							nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
+
+							nameDialog.setResultConverter(new Callback<ButtonType, String>() {
+								@Override
+								public String call(ButtonType b) {
+
+									if (b == buttonTypeOk2) {
+										return nameTF.getText();
+									}
+
+									return null;
+								}
+							});
+
+							itemName = nameDialog.showAndWait().get();
+							if (itemName.equals(""))
+								throw new Exception();
+
+						} catch (Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("ÇÓã ÎÇØÆ");
+							alert.setHeaderText(null);
+							alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÓáÚÉ");
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+							alert.showAndWait();
+							cancle = true;
+
+						}
+						//////
+
+						TextInputDialog dialog = new TextInputDialog();
+//			             
+						dialog = new TextInputDialog();
+						dialog.setTitle("ÇáßãíÉ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+						if (!cancle)
+							try {
+								quant = Integer.parseInt(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+//			             
+						dialog = new TextInputDialog();
+						dialog.setTitle("ÓÚÑ ÇáÔÑÇÁ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÔÑÇÁ ÇáæÍÏÉ");
+						if (!cancle)
+							try {
+								buyPrice = Double.parseDouble(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÇáÔÑÇÁ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+//			             
+						dialog = new TextInputDialog();
+						dialog.setTitle("ÓÚÑ ÇáÈíÚ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÈíÚ ÇáæÍÏÉ");
+						if (!cancle)
+							try {
+								sellPrice = Double.parseDouble(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÇáÈíÚ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+						//
+						// show Calender dialog
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						try {
+							dateDialog.setTitle("ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							dateDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+
+							DatePicker datePicker = new DatePicker();
+							dateDialog.getDialogPane().setContent(datePicker);
+
+							ButtonType buttonTypeOk = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+							dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+							dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+								@Override
+								public LocalDate call(ButtonType b) {
+
+									if (b == buttonTypeOk) {
+
+										return datePicker.getValue();
+									}
+
+									return null;
+								}
+							});
+
+							if (!cancle)
+								expDate = dateDialog.showAndWait().get();
+						} catch (Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+							alert.setHeaderText(null);
+							alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÊÇÑíÎ ÅäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+							alert.showAndWait();
+							cancle = true;
+						}
+
+					} else {
+						rs = statement.executeQuery(q);
+
+						TextInputDialog dialog = new TextInputDialog();
+						//
+						dialog = new TextInputDialog();
+						dialog.setTitle("ÇáßãíÉ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+						if (!cancle)
+							try {
+								quant = Integer.parseInt(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+						//
+						// show Calender dialog
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						try {
+							dateDialog.setTitle("ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							dateDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+
+							DatePicker datePicker = new DatePicker();
+							dateDialog.getDialogPane().setContent(datePicker);
+
+							ButtonType buttonTypeOk = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+							dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+							dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+								@Override
+								public LocalDate call(ButtonType b) {
+
+									if (b == buttonTypeOk) {
+
+										return datePicker.getValue();
+									}
+
+									return null;
+								}
+							});
+
+							if (!cancle)
+								expDate = dateDialog.showAndWait().get();
+						} catch (Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+							alert.setHeaderText(null);
+							alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÊÇÑíÎ ÅäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+							alert.showAndWait();
+							cancle = true;
+						}
+
+						sellPrice = rs.getDouble("sell_price");
+						buyPrice = rs.getDouble("buy_price");
+						itemName = rs.getString("Name");
+
+					}
+				}
+				// barcode not written
+				else {
+					// ask for the name
+					////////
+					Dialog<String> nameDialog = new Dialog<>();
+					try {
+						nameDialog.setTitle("ÇÓã ÇáÓáÚÉ");
+						nameDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÇÓã ÇáÓáÚÉ");
 
 						Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
 						stage2.getIcons().add(new Image("/application/images/icon.png"));
@@ -380,7 +606,7 @@ public class ImportBillController implements Initializable {
 						TextFields.bindAutoCompletion(nameTF, storedItems);
 						nameDialog.getDialogPane().setContent(nameTF);
 
-						ButtonType buttonTypeOk2 = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
+						ButtonType buttonTypeOk2 = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
 						nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
 
 						nameDialog.setResultConverter(new Callback<ButtonType, String>() {
@@ -397,36 +623,65 @@ public class ImportBillController implements Initializable {
 						});
 
 						itemName = nameDialog.showAndWait().get();
+						if (itemName.equals(""))
+							throw new Exception();
+
+					} catch (Exception e) {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("ÇÓã ÎÇØÆ");
+						alert.setHeaderText(null);
+						alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÓáÚÉ");
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("/application/images/icon.png"));
+						alert.showAndWait();
+						cancle = true;
+
+					}
+					q = "select * from stored where name='" + itemName + "'";
+					int count = 0;
+					ResultSet rs = statement.executeQuery(q);
+					while (rs.next()) {
+						count++;
+					}
+
+					if (count != 0) {
+						// ask for date & quant
+						rs = statement.executeQuery(q);
+						rs.next();
+						sellPrice = rs.getDouble("sell_price");
+						buyPrice = rs.getDouble("buy_price");
 						TextInputDialog dialog = new TextInputDialog();
 
-//			             
-							dialog = new TextInputDialog();
-							dialog.setTitle("Ø§Ù„ÙƒÙ…ÙŠØ©");
-							dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©");
-							quant = Integer.parseInt(dialog.showAndWait().get());
-//			             
-							dialog = new TextInputDialog();
-							dialog.setTitle("Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-							dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-							buyPrice = Double.parseDouble(dialog.showAndWait().get());
-//			             
-							dialog = new TextInputDialog();
-							dialog.setTitle("Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-							dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-							sellPrice = Double.parseDouble(dialog.showAndWait().get());
-
-							// show Calender dialog
-							Dialog<LocalDate> dateDialog = new Dialog<>();
-							dateDialog.setTitle("ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-							dateDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-
+						//
+						dialog = new TextInputDialog();
+						dialog.setTitle("ÇáßãíÉ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+						if(!cancle)
+							try {
+								quant = Integer.parseInt(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+						//
+						// show Calender dialog
+						Dialog<LocalDate> dateDialog = new Dialog<>();
+						try {
+							dateDialog.setTitle("ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							dateDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
 							Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
 							stage.getIcons().add(new Image("/application/images/icon.png"));
 
 							DatePicker datePicker = new DatePicker();
 							dateDialog.getDialogPane().setContent(datePicker);
 
-							ButtonType buttonTypeOk = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
+							ButtonType buttonTypeOk = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
 							dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
 
 							dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
@@ -442,294 +697,127 @@ public class ImportBillController implements Initializable {
 								}
 							});
 
-							expDate = dateDialog.showAndWait().get();
-						
-						
-						
-						
-					} else {
-						rs=statement.executeQuery(q);
-						
-						TextInputDialog dialog = new TextInputDialog();
-
-						dialog = new TextInputDialog();
-						dialog.setTitle("Ø§Ù„ÙƒÙ…ÙŠØ©");
-						dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©");
-						quant = Integer.parseInt(dialog.showAndWait().get());
-						Dialog<LocalDate> dateDialog = new Dialog<>();
-						dateDialog.setTitle("ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-						dateDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-
-						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("/application/images/icon.png"));
-
-						DatePicker datePicker = new DatePicker();
-						dateDialog.getDialogPane().setContent(datePicker);
-
-						ButtonType buttonTypeOk = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-
-						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
-							@Override
-							public LocalDate call(ButtonType b) {
-
-								if (b == buttonTypeOk) {
-
-									return datePicker.getValue();
-								}
-
-								return null;
-							}
-						});
-
-						expDate = dateDialog.showAndWait().get();
-					sellPrice=rs.getDouble("sell_price");
- 					buyPrice=rs.getDouble("buy_price");
-                    itemName=rs.getString("Name");
- 					
-					}
-				}
-				//barcode not written
-				else {
-					// ask for the name
-					////////
-					Dialog<String> nameDialog = new Dialog<>();
-					nameDialog.setTitle("Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
-					nameDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
-
-					Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
-					stage2.getIcons().add(new Image("/application/images/icon.png"));
-
-					TextField nameTF = new TextField("");
-					TextFields.bindAutoCompletion(nameTF, storedItems);
-					nameDialog.getDialogPane().setContent(nameTF);
-
-					ButtonType buttonTypeOk2 = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-					nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
-
-					nameDialog.setResultConverter(new Callback<ButtonType, String>() {
-						@Override
-						public String call(ButtonType b) {
-
-							if (b == buttonTypeOk2) {
-
-								return nameTF.getText();
-							}
-
-							return null;
+							if (!cancle)
+								expDate = dateDialog.showAndWait().get();
+						} catch (Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+							alert.setHeaderText(null);
+							alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÊÇÑíÎ ÅäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+							alert.showAndWait();
+							cancle = true;
 						}
-					});
 
-					itemName = nameDialog.showAndWait().get();
-					
-					q="select * from stored where name='"+itemName+"'";
-					int count=0;
-					ResultSet rs=statement.executeQuery(q);
-					while(rs.next()) {count++;}
-					
-					if (count!=0) {
-						// ask for date & quant
-						rs=statement.executeQuery(q);
-						rs.next();
-						sellPrice=rs.getDouble("sell_price");
-						buyPrice=rs.getDouble("buy_price");
-						TextInputDialog dialog = new TextInputDialog();
-
-						dialog = new TextInputDialog();
-						dialog.setTitle("Ø§Ù„ÙƒÙ…ÙŠØ©");
-						dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©");
-						quant = Integer.parseInt(dialog.showAndWait().get());
-						Dialog<LocalDate> dateDialog = new Dialog<>();
-						dateDialog.setTitle("ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-						dateDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-
-						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("/application/images/icon.png"));
-
-						DatePicker datePicker = new DatePicker();
-						dateDialog.getDialogPane().setContent(datePicker);
-
-						ButtonType buttonTypeOk = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-
-						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
-							@Override
-							public LocalDate call(ButtonType b) {
-
-								if (b == buttonTypeOk) {
-
-									return datePicker.getValue();
-								}
-
-								return null;
-							}
-						});
-
-						expDate = dateDialog.showAndWait().get();
-						
 					}
 
 					else {
 						// ask for everything
-						
-						
-						
-						
+
 						TextInputDialog dialog = new TextInputDialog();
 
 //		             
 						dialog = new TextInputDialog();
-						dialog.setTitle("Ø§Ù„ÙƒÙ…ÙŠØ©");
-						dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©");
-						quant = Integer.parseInt(dialog.showAndWait().get());
-//		             
+						dialog.setTitle("ÇáßãíÉ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+						if (!cancle)
+							try {
+								quant = Integer.parseInt(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÇáßãíÉ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+//			             
 						dialog = new TextInputDialog();
-						dialog.setTitle("Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-						dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-						buyPrice = Double.parseDouble(dialog.showAndWait().get());
-//		             
+						dialog.setTitle("ÓÚÑ ÇáÔÑÇÁ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÔÑÇÁ ÇáæÍÏÉ");
+						if (!cancle)
+							try {
+								buyPrice = Double.parseDouble(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÇáÔÑÇÁ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+//			             
 						dialog = new TextInputDialog();
-						dialog.setTitle("Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-						dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-						sellPrice = Double.parseDouble(dialog.showAndWait().get());
+						dialog.setTitle("ÓÚÑ ÇáÈíÚ");
+						dialog.setHeaderText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÈíÚ ÇáæÍÏÉ");
+						if (!cancle)
+							try {
+								sellPrice = Double.parseDouble(dialog.showAndWait().get());
+							} catch (Exception e) {
+								Alert alert = new Alert(AlertType.WARNING);
+								alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+								alert.setHeaderText(null);
+								alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÓÚÑ ÇáÈíÚ");
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("/application/images/icon.png"));
+								alert.showAndWait();
+								cancle = true;
+							}
+						//
 
 						// show Calender dialog
 						Dialog<LocalDate> dateDialog = new Dialog<>();
-						dateDialog.setTitle("ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-						dateDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
+						try {
+							dateDialog.setTitle("ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							dateDialog.setHeaderText("ÇáÑÌÇÁ ÇÏÎÇá ÊÇÑíÎ ÇäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
 
-						Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("/application/images/icon.png"));
+							DatePicker datePicker = new DatePicker();
+							dateDialog.getDialogPane().setContent(datePicker);
 
-						DatePicker datePicker = new DatePicker();
-						dateDialog.getDialogPane().setContent(datePicker);
+							ButtonType buttonTypeOk = new ButtonType("ÊÃßíÏ", ButtonData.OK_DONE);
+							dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
 
-						ButtonType buttonTypeOk = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-						dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+							dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
+								@Override
+								public LocalDate call(ButtonType b) {
 
-						dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
-							@Override
-							public LocalDate call(ButtonType b) {
+									if (b == buttonTypeOk) {
 
-								if (b == buttonTypeOk) {
+										return datePicker.getValue();
+									}
 
-									return datePicker.getValue();
+									return null;
 								}
+							});
 
-								return null;
-							}
-						});
+							if (!cancle)
+								expDate = dateDialog.showAndWait().get();
+						} catch (Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("ÅÏÎÇá ÎÇØÆ");
+							alert.setHeaderText(null);
+							alert.setContentText("ÇáÑÌÇÁ ÅÏÎÇá ÊÇÑíÎ ÅäÊåÇÁ ÇáÓáÚÉ");
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("/application/images/icon.png"));
+							alert.showAndWait();
+							cancle = true;
+						}
 
-						expDate = dateDialog.showAndWait().get();
-
-						
-						
 					}
 				}
 
-				/*
-				 * // Ø§Ø°Ø§ Ø§Ù„Ø¨Ø§Ø±ÙƒÙˆØ¯ Ù‡Ø§Ø¯ Ù…ÙˆØ¬ÙˆØ¯ Ø¨Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ³
-				 * Ù…Ø¹Ù†Ø§ØªÙ‡ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙ‡ Ù…Ø¹Ù†Ø§ Ø¨Ø³ Ø¨Ù†Ø·Ù„Ø¨ Ø§Ù„ÙƒÙ…ÙŠØ© //
-				 * ÙˆØªØ§Ø±ÙŠØ® Ø§Ù„Ø§Ù†ØªÙ‡Ø§Ø¡ Ø¨Ø¯ÙˆÙ† Ø§Ø³Ø¹Ø§Ø± if (true) ; // Ø§Ø°Ø§ Ù„Ø£
-				 * Ø¨Ù†Ø´ÙˆÙ Ø§Ù„Ø§Ø³Ù… Ø§Ø°Ø§ Ù…ÙˆØ¬ÙˆØ¯ Ø¨Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ³ ØŒ Ø¨Ù†Ø¹Ø·ÙŠ
-				 * Ø§Ù„Ø¨Ø§Ø±ÙƒÙˆØ¯ ØªØ¨Ø¹ Ù‡Ø§Ø¯ Ø§Ù„Ø§Ø³Ù… // Ù„Ù„Ù…ØªØºÙŠØ± Ø¨Ø§Ø±ÙƒÙˆØ¯
-				 * ÙˆØ¨Ù†Ø§Ø®Ø¯ ÙƒÙ…ÙŠØ© ÙˆØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ else if (true) ; //
-				 * Ø¨Ø§Ù„Ø­Ø§Ù„ØªÙŠÙ† Ù‡Ø¯ÙˆÙ„ Ø§Ù„Ø³Ù„Ø¹Ø© Ù…ÙˆØ¬ÙˆØ¯Ø© Ø¨Ø§Ù„Ù…Ø®Ø²Ù† Ù Ù…Ø§
-				 * Ø¨Ù†Ø¶ÙŠÙÙ‡Ø§ Ø¨Ø³ Ø¨Ù†Ø¹Ø¯Ù„ Ø¹ ÙƒÙ…ÙŠØªÙ‡Ø§ ÙˆØªØ§Ø±ÙŠØ®Ù‡Ø§
-				 * 
-				 * // Ø§Ø°Ø§ Ø§Ù„Ø¨Ø§Ø±ÙƒÙˆØ¯ ÙˆØ§Ù„Ø§Ø³Ù… Ø¬Ø¯Ø§Ø¯ ØŒ Ø¨Ù†Ø§Ø®Ø¯ ÙƒÙ„
-				 * Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª ÙˆØ¨Ù†Ø¶ÙŠÙÙ‡Ø§ Ù„Ù„Ù…Ø®Ø²Ù† ÙƒØ³Ù„Ø¹Ø© Ø¬Ø¯ÙŠØ¯Ø© else ;
-				 * 
-				 * 
-				 */
+				if (!cancle)
+					data.add(new Item(barcode, itemName, quant, buyPrice, sellPrice, expDate, buyPrice * quant,
+							sellPrice * quant));
 
-				// show ItemName Dialog
-			/*	Dialog<String> nameDialog = new Dialog<>();
-				nameDialog.setTitle("Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
-				nameDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø§Ø³Ù… Ø§Ù„Ø³Ù„Ø¹Ø©");
-
-				Stage stage2 = (Stage) nameDialog.getDialogPane().getScene().getWindow();
-				stage2.getIcons().add(new Image("/application/images/icon.png"));
-
-				TextField nameTF = new TextField("");
-				TextFields.bindAutoCompletion(nameTF, storedItems);
-				nameDialog.getDialogPane().setContent(nameTF);
-
-				ButtonType buttonTypeOk2 = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-				nameDialog.getDialogPane().getButtonTypes().add(buttonTypeOk2);
-
-				nameDialog.setResultConverter(new Callback<ButtonType, String>() {
-					@Override
-					public String call(ButtonType b) {
-
-						if (b == buttonTypeOk2) {
-
-							return nameTF.getText();
-						}
-
-						return null;
-					}
-				});
-
-				itemName = nameDialog.showAndWait().get();
-// to here
-				
-				
-				TextInputDialog dialog = new TextInputDialog();
-
-//             
-				dialog = new TextInputDialog();
-				dialog.setTitle("Ø§Ù„ÙƒÙ…ÙŠØ©");
-				dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©");
-				quant = Integer.parseInt(dialog.showAndWait().get());
-//             
-				dialog = new TextInputDialog();
-				dialog.setTitle("Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-				dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø´Ø±Ø§Ø¡ Ø§Ù„ÙˆØ­Ø¯Ø©");
-				buyPrice = Double.parseDouble(dialog.showAndWait().get());
-//             
-				dialog = new TextInputDialog();
-				dialog.setTitle("Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-				dialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ Ø³Ø¹Ø± Ø¨ÙŠØ¹ Ø§Ù„ÙˆØ­Ø¯Ø©");
-				sellPrice = Double.parseDouble(dialog.showAndWait().get());
-
-				// show Calender dialog
-				Dialog<LocalDate> dateDialog = new Dialog<>();
-				dateDialog.setTitle("ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-				dateDialog.setHeaderText("Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø¯Ø®Ø§Ù„ ØªØ§Ø±ÙŠØ® Ø§Ù†ØªÙ‡Ø§Ø¡ Ø§Ù„Ø³Ù„Ø¹Ø©");
-
-				Stage stage = (Stage) dateDialog.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("/application/images/icon.png"));
-
-				DatePicker datePicker = new DatePicker();
-				dateDialog.getDialogPane().setContent(datePicker);
-
-				ButtonType buttonTypeOk = new ButtonType("ØªØ£ÙƒÙŠØ¯", ButtonData.OK_DONE);
-				dateDialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-
-				dateDialog.setResultConverter(new Callback<ButtonType, LocalDate>() {
-					@Override
-					public LocalDate call(ButtonType b) {
-
-						if (b == buttonTypeOk) {
-
-							return datePicker.getValue();
-						}
-
-						return null;
-					}
-				});
-
-				expDate = dateDialog.showAndWait().get();
-*/
-				//to here
-//
-//              System.out.println(barcode+"    "+itemName+"    "+quant+"    "+buyPrice+"    "+sellPrice+"  "+expDate);
-
-				data.add(new Item(barcode, itemName, quant, buyPrice, sellPrice, expDate, buyPrice * quant,
-						sellPrice * quant));
 				table.refresh();
-
 				barcodeReader.clear();
 
 			}
