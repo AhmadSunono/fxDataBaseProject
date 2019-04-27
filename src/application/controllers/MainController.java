@@ -109,6 +109,8 @@ public class MainController implements Initializable {
 
 	@FXML
 	void buttonHandler(ActionEvent event) throws IOException {
+		
+		offTime=0;
 
 		if (event.getSource().toString().contains("sellViewButton")) {
 			stack.getChildren().clear();

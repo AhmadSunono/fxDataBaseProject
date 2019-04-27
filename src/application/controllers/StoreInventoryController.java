@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -16,15 +17,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -32,7 +33,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.LocalDateStringConverter;
 
 public class StoreInventoryController implements Initializable {
 
@@ -111,14 +111,14 @@ public class StoreInventoryController implements Initializable {
 			date = dateDialog.showAndWait().get();
 			table.getSelectionModel().getSelectedItem().setExpDate(date);
 			barcode = table.getSelectionModel().getSelectedItem().getBarcode();
-			
-			
+
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
-				statement.executeUpdate(
-						"update stored set exp_date=TO_DATE('"+date+"','YYYY-MM-DD') where barcode='" + barcode + "'");
+				statement.executeUpdate("update stored set exp_date=TO_DATE('" + date
+						+ "','YYYY-MM-DD') where barcode='" + barcode + "'");
 
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -126,18 +126,16 @@ public class StoreInventoryController implements Initializable {
 			} finally {
 				table.refresh();
 			}
-			
-		} catch (Exception e) {
-			   Alert alert = new Alert(AlertType.WARNING);
-			   alert.setTitle(" «—ÌŒ Œ«ÿ∆");
-			   alert.setHeaderText(null);
-			   alert.setContentText("·„  ﬁ„ »≈œŒ«·  «—ÌŒ° «·—Ã«¡ ≈œŒ«·  «—ÌŒ ≈‰ Â«¡ ··”·⁄…");
-			   Stage stage =(Stage) alert.getDialogPane().getScene().getWindow();
-			   stage.getIcons().add(new Image("/application/images/icon.png"));
-			   alert.showAndWait();
-		}
-		
 
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle(" «—ÌŒ Œ«ÿ∆");
+			alert.setHeaderText(null);
+			alert.setContentText("·„  ﬁ„ »≈œŒ«·  «—ÌŒ° «·—Ã«¡ ≈œŒ«·  «—ÌŒ ≈‰ Â«¡ ··”·⁄…");
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("/application/images/icon.png"));
+			alert.showAndWait();
+		}
 
 	}
 
@@ -149,7 +147,8 @@ public class StoreInventoryController implements Initializable {
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+			Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+					"112233");
 			Statement statement = connection.createStatement();
 			String q = "delete from stored where quantity<=0";
 			statement.executeUpdate(q);
@@ -197,7 +196,7 @@ public class StoreInventoryController implements Initializable {
 
 		this.totalBuyPrice.setText(totalBuyPrice + "");
 		this.totalSellPrice.setText(totalSellPrice + "");
-		this.totalProfit.setText(totalProfit + "");
+		this.totalProfit.setText(new DecimalFormat("###.#").format(totalProfit) + "");
 	}
 
 	public void makeTableEditable() {
@@ -207,7 +206,8 @@ public class StoreInventoryController implements Initializable {
 			e.getTableView().getItems().get(e.getTablePosition().getRow()).setBarcode(e.getNewValue());
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
 						"update stored set barcode='" + e.getNewValue() + "' where barcode='" + e.getOldValue() + "'");
@@ -227,7 +227,8 @@ public class StoreInventoryController implements Initializable {
 			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
 			try {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
+				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad",
+						"112233");
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
 						"update stored set name='" + e.getNewValue() + "' where barcode='" + barcode + "'");
@@ -241,63 +242,140 @@ public class StoreInventoryController implements Initializable {
 			}
 		});
 
-		quantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+//		quantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+		quantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter() {
+			@Override
+			public Integer fromString(String value) {
+				try {
+					return super.fromString(value);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return -1;
+				}
+			}
+		}));
+
 		quantityColumn.setOnEditCommit(e -> {
-			e.getTableView().getItems().get(e.getTablePosition().getRow()).setQuant(e.getNewValue());
-			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
-			try {
-				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
-				Statement statement = connection.createStatement();
-				statement.executeUpdate(
-						"update stored set quantity='" + e.getNewValue() + "' where barcode='" + barcode + "'");
-
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} finally {
+			if (e.getNewValue() == null || e.getNewValue() < 0) {
 				table.refresh();
-				calculateTotals(data.size());
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("≈œŒ«· Œ«ÿ∆");
+				alert.setHeaderText(null);
+				alert.setContentText("«·—Ã«¡ ≈œŒ«· «·ﬂ„Ì… »‘ﬂ· ’ÕÌÕ");
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("/application/images/icon.png"));
+				alert.showAndWait();
+
+			}
+
+			else {
+				try {
+					e.getTableView().getItems().get(e.getTablePosition().getRow()).setQuant(e.getNewValue());
+					String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
+					DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",
+							"ahmad", "112233");
+					Statement statement = connection.createStatement();
+					statement.executeUpdate(
+							"update stored set quantity='" + e.getNewValue() + "' where barcode='" + barcode + "'");
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally {
+					table.refresh();
+					calculateTotals(data.size());
+				}
+
 			}
 		});
 
-		buyPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		buyPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter() {
+			@Override
+			public Double fromString(String value) {
+				try {
+					return super.fromString(value);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return Double.NaN;
+				}
+			}
+		}));
 		buyPriceColumn.setOnEditCommit(e -> {
-			e.getTableView().getItems().get(e.getTablePosition().getRow()).setBuyPrice(e.getNewValue());
-			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
-			try {
-				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
-				Statement statement = connection.createStatement();
-				statement.executeUpdate(
-						"update stored set buy_price='" + e.getNewValue() + "' where barcode='" + barcode + "'");
-
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} finally {
+			if (e.getNewValue() == null || e.getNewValue().isNaN() || e.getNewValue() < 0) {
 				table.refresh();
-				calculateTotals(data.size());
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("≈œŒ«· Œ«ÿ∆");
+				alert.setHeaderText(null);
+				alert.setContentText("«·—Ã«¡ ≈œŒ«· ”⁄— «·‘—«¡ »‘ﬂ· ’ÕÌÕ");
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("/application/images/icon.png"));
+				alert.showAndWait();
+
+			} else {
+				e.getTableView().getItems().get(e.getTablePosition().getRow()).setBuyPrice(e.getNewValue());
+				String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
+				try {
+					DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",
+							"ahmad", "112233");
+					Statement statement = connection.createStatement();
+					statement.executeUpdate(
+							"update stored set buy_price='" + e.getNewValue() + "' where barcode='" + barcode + "'");
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally {
+					table.refresh();
+					calculateTotals(data.size());
+				}
+
 			}
 		});
 
-		sellPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		sellPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter() {
+			@Override
+			public Double fromString(String value) {
+				try {
+					return super.fromString(value);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return Double.NaN;
+				}
+			}
+		}));
 		sellPriceColumn.setOnEditCommit(e -> {
-			e.getTableView().getItems().get(e.getTablePosition().getRow()).setSellPrice(e.getNewValue());
-			String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
-			try {
-				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ahmad","112233");
-				Statement statement = connection.createStatement();
-				statement.executeUpdate(
-						"update stored set sell_price='" + e.getNewValue() + "' where barcode='" + barcode + "'");
-
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} finally {
+			if (e.getNewValue() == null || e.getNewValue().isNaN() || e.getNewValue() < 0) {
 				table.refresh();
-				calculateTotals(data.size());
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("≈œŒ«· Œ«ÿ∆");
+				alert.setHeaderText(null);
+				alert.setContentText("«·—Ã«¡ ≈œŒ«· ”⁄— «·»Ì⁄ »‘ﬂ· ’ÕÌÕ");
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("/application/images/icon.png"));
+				alert.showAndWait();
+
+			} else {
+				e.getTableView().getItems().get(e.getTablePosition().getRow()).setSellPrice(e.getNewValue());
+				String barcode = e.getTableView().getItems().get(e.getTablePosition().getRow()).getBarcode();
+				try {
+					DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+					Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl",
+							"ahmad", "112233");
+					Statement statement = connection.createStatement();
+					statement.executeUpdate(
+							"update stored set sell_price='" + e.getNewValue() + "' where barcode='" + barcode + "'");
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally {
+					table.refresh();
+					calculateTotals(data.size());
+				}
+
 			}
 		});
 
